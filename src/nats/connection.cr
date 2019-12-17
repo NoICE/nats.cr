@@ -372,8 +372,8 @@ module NATS
     def close
       return if @closed
       @closed = true
+      flush_outbound
       @out.synchronize do
-        flush_outbound
         @socket.flush
       end
       @socket.close
