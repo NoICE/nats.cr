@@ -16,6 +16,7 @@ require "socket"
 require "uri"
 require "json"
 require "openssl"
+require "big"
 
 require "./nuid"
 require "./msg"
@@ -249,7 +250,7 @@ module NATS
       rn = @rand.rand(Int64::MAX)
       String::Builder.build(TOKEN_LENGTH) do |io|
         (0...TOKEN_LENGTH).each do
-          io << NUID::DIGITS[rn % NUID::BASE]
+          io << NUID::DIGITS[(rn % NUID::BASE).to_big_i]
           rn /= NUID::BASE
         end
       end
