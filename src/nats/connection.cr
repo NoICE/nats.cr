@@ -141,12 +141,12 @@ module NATS
       new(host, port, uri.user, uri.password, **args)
     end
 
-    private def out_sync
-      @out.synchronize do
-        yield
-      end
-      @flush.send(true) if @flush.empty?
-    end
+    # private def out_sync
+    #   @out.synchronize do
+    #     yield
+    #   end
+    #   @flush.send(true)
+    # end
 
     private def check_size(data)
       if data.size > @max_payload
@@ -176,7 +176,7 @@ module NATS
         @socket.write(data)
         @socket.write(CR_LF_SLICE)
       end
-      @flush.send(true) if @flush.empty?
+      @flush.send(true)
     end
 
     # Publishes an empty message to a given subject.
@@ -195,7 +195,7 @@ module NATS
         @socket.write(" 0\r\n\r\n".to_slice)
       end
 
-      @flush.send(true) if @flush.empty?
+      @flush.send(true)
     end
 
     # Publishes a messages to a given subject with a reply subject.
@@ -225,7 +225,7 @@ module NATS
         @socket.write(data)
         @socket.write(CR_LF_SLICE)
       end
-      @flush.send(true) if @flush.empty?
+      @flush.send(true)
     end
 
     # Flush will flush the connection to the server. Can specify a *timeout*.
@@ -299,7 +299,7 @@ module NATS
         @socket << ' ' << sid
         @socket.write(CR_LF_SLICE)
       end
-      @flush.send(true) if @flush.empty?
+      @flush.send(true)
       InternalSubscription.new(sid, self).tap do |sub|
         @subs[sid] = sub
       end
@@ -319,7 +319,7 @@ module NATS
         @socket << ' ' << sid
         @socket.write(CR_LF_SLICE)
       end
-      @flush.send(true) if @flush.empty?
+      @flush.send(true)
       Subscription.new(sid, self, callback).tap do |sub|
         @subs[sid] = sub
       end
@@ -341,7 +341,7 @@ module NATS
         @socket << ' ' << sid
         @socket.write(CR_LF_SLICE)
       end
-      @flush.send(true) if @flush.empty?
+      @flush.send(true)
       Subscription.new(sid, self, callback).tap do |sub|
         @subs[sid] = sub
       end
@@ -359,7 +359,7 @@ module NATS
         @socket << sid
         @socket.write(CR_LF_SLICE)
       end
-      @flush.send(true) if @flush.empty?
+      @flush.send(true)
     end
 
     # Close a connection to the NATS server.
