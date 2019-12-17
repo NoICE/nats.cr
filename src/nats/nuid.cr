@@ -13,6 +13,7 @@
 #
 
 require "random/secure"
+require "big"
 
 # Copied and modified from nats-pure repo.
 # https://github.com/nats-io/nats-pure.rb/blob/master/lib/nats/nuid.rb
